@@ -1,13 +1,13 @@
 '''
 arreglar:
 -pasarlo a ingles o español, ahora hay un spanglish
--los senos y cosenos tienen problemas cuando paso los 90°
+-los senos y cosenos tienen problemas cuando paso los 90° o 180°
 -el formato 2D permite cambio de la ubicacion del observador, en el plano 3D el observador se mantiene en el punto  x,y,z = 0,0,0
+-cuando las posiciones estan en 0, da error (porque no arregle eso de dividir por 0 aun)
 
-mejoras:
-- pasarlo a 3D (done)
-- Anticipacion/pronosticar
-- 
+mejoras previstas:
+- Anticipacion/pronosticar ubicacion del objeto
+- caluclar sitancias relativas si el observador se encuentra en movimiento
 '''
 import os
 import math
@@ -15,8 +15,10 @@ import math
 def menu():
     print('''
     --------- calc of artillery  -----------
+    Opciones en 3D:
     1) De cartesianos a radianes (3D)
     2) De radianes a cartesianos (3D)
+
 
     Opciones en 2D:
     3) De cartesianos a radianes (2D)
@@ -28,13 +30,27 @@ def menu():
 
 
 
-def cartesianoRadianes():
+def cartesianoRadianes3D():
     os.system("cls")
 
     #    X  Y   Z
     #a = [10,10,10]
     a = [0,0,0]
     def input_coordinates():
+        def print_map_empty():
+                print(f'''
+                         Z  
+                         |     α XZ:   °
+                         |      
+                         |_ _ _ _ _ _ X
+                        /
+                       /   ß XY:    °
+                   Y  /
+        ''')
+
+        print_map_empty()
+
+        
         print("insert coordinates in: ")
         a[0] = int(input(' anxis "X": '))
         a[1] = int(input(' anxis "Y": '))
@@ -42,36 +58,66 @@ def cartesianoRadianes():
         return a
 
     def distance(a):
+        #diagonals of the plane
         diagonal_XYZ = round(math.sqrt(a[0]**2 + a[1]**2 + a[2]**2),2)
         diagonal_XY = round(math.sqrt(a[0]**2+a[1]**2),2)
         diagonal_XZ = round(math.sqrt(a[0]**2+a[2]**2),2) 
         diagonal_YZ = round(math.sqrt(a[1]**2+a[2]**2),2)
 
+        print("\n")
         print("position of the objective ",a)
-        print("the distance in the plane XY",diagonal_XY)
-        print("the distance in the plane XZ",diagonal_XZ)
-        print("the distance in the plane YZ",diagonal_YZ)
-        print("total distance(space XYZ) is: ",diagonal_XYZ)
+        print("\n")
+        print("total distance(space XYZ) is: ",diagonal_XYZ, " units.")
 
     def angle(a):
         
         AngleXY = round((math.atan(a[1]/ a[0]) * 57.2958),2)
+        AngleXZ = round(math.atan(a[2]/ a[0]) * 57.2958,2)
 
-        AngleXZ = round(math.atan(a[1]/ math.sqrt(a[0]**2+a[1]**2)) * 57.2958,2)
-        print(f'the angle XY is: {AngleXY}')
-        print(f'the angle XZ is: {AngleXZ}')   
-        return AngleXY, AngleXZ
+        def print_angle(AngleXY, AngleXZ):
+            print(f'the angle XY is: {AngleXY}°')
+            print(f'the angle XZ is: {AngleXZ}°')   
 
+        def print_map(AngleXY, AngleXZ):
 
-    
+            print(f'''
+                            Z  
+                            |     α XZ: {AngleXZ}°
+                            |      
+                            |_ _ _ _ _ _ X           
+                           /
+                          /   ß XY: {AngleXY}°
+                     Y   /
+            ''')
+        print_angle(AngleXY, AngleXZ)
+        print_map(AngleXY, AngleXZ)
+        
+        
     input_coordinates()
-    angle(a)
     distance(a)
+    angle(a)
+    
+
+
 
 def radianesCartesianos():
-    distance = int(input("insert distance: "))
-    angleXZ =  math.radians(int(input("insert angle XY in degrees: ")))
-    angleXY =  math.radians(int(input("insert angle XZ in degrees: ")))
+
+    def print_plane():
+        print(f'''
+                         Z  
+                         |    
+                         |      
+                         |_ _ _ _ _ _ X
+                        /
+                       /   
+                   Y  /
+        ''')
+    
+    print_plane()
+    distance = int(input("Isnsert distance: "))
+    angleXZ =  math.radians(int(input("Insert angle XY in degrees: ")))
+    angleXY =  math.radians(int(input("Insert angle XZ in degrees: ")))
+
  
     '''
     if angle.lower() == "rad":
@@ -84,13 +130,25 @@ def radianesCartesianos():
     Y = round(math.sin(angleXY) * distance,2)
     Z = round(math.sin(angleXZ) * distance,2)
     
-    print(f'el objetivo se encuentra eje X {X}')
-    print(f'el objetivo se encuentra eje Y {Y}')
-    print(f'el objetivo se encuentra eje Z {Z}')
+    print(f'el objetivo se encuentra eje X: {X}')
+    print(f'el objetivo se encuentra eje Y: {Y}')
+    print(f'el objetivo se encuentra eje Z: {Z}')
     
 
 def cartesianoRadianes2D():
 
+    def print_matrix_empty():
+        print('''
+ 
+ Y  |
+    |
+    |
+    |
+ _ _|_ _ _ _ _ X
+    |    
+    |    ''')
+
+    ''' 
     matriz = []
     def matrix():
         nonlocal matriz
@@ -100,44 +158,37 @@ def cartesianoRadianes2D():
             matriz.append([])
             for j in range(size):
                 matriz[i].append("_")
-    matrix()
+    matrix()'''
+  
+    def inputs():
+        print("ingrese las siguentes ubicaciones: ")
+        mi_horizontal =  int(input(" ubicacion horizontal observador (eje x): "))
+        mi_vertical =  int(input(" ubicacion vertical observador(eje y): "))
+        objetivo_horizontal =  int(input(" ubicacion horizontal del objetivo (eje x): "))
+        objetivo_vertical =  int(input(" ubicacion vertical del objetivo (eje y): "))
 
-    print("ingrese las siguentes ubicaciones: ")
-    mi_horizontal =  int(input("su ubicacion horizontal (eje x): "))
-    mi_vertical =  int(input("su ubicacion vertical (eje y): "))
-    objetivo_horizontal =  int(input(" ubicacion horizontal del objetivo (eje x): "))
-    objetivo_vertical =  int(input(" ubicacion vertical del objetivo (eje y): "))
-
-    matriz[objetivo_horizontal][objetivo_vertical] = "X"
-    matriz[mi_horizontal][mi_vertical] = "Y"
-
-    distancia_alto = mi_vertical - objetivo_vertical
-    distancia_ancho = mi_horizontal - objetivo_horizontal
+        distancia_alto = mi_vertical - objetivo_vertical
+        distancia_ancho = mi_horizontal - objetivo_horizontal
+        
+        def distanciaAngulo(distancia_ancho,distancia_alto):
+            hipotenusa = round(math.sqrt((distancia_alto) **2 + (distancia_ancho) **2),4) 
+            if distancia_alto !=0:
+                angulo = (math.atan(distancia_ancho/ distancia_alto) * 57.2958)
+            else:
+                angulo = 0
+            print(f'La distancia al objetivo es: {hipotenusa}')
+            print(f'El angulo es: {round(angulo,2)}')
+        distanciaAngulo(distancia_ancho,distancia_alto)
     '''
-    def referencias():
-        print(f'el objetivo se encuentra verticalmente a {mi_vertical-objetivo_vertical} ')
-        print(f'el objetivo se encuentra horizontalmente a {mi_horizontal-objetivo_horizontal} ')
-
-    referencias()'''
-    
-    def distanciaAngulo():
-        hipotenusa = round(math.sqrt((mi_vertical-objetivo_vertical) **2 + (mi_horizontal-objetivo_horizontal) **2),4) 
-        if distancia_alto !=0:
-            angulo = (math.atan(distancia_ancho/ distancia_alto) * 57.2958)
-        else:
-            angulo = 0
-        print(f'La distancia al objetivo es: {hipotenusa}')
-        print(f'El angulo es: {round(angulo,2)}')
-
-    distanciaAngulo()
     def print_matriz(matriz):
-
         for i in matriz:
             print(i)
-    print_matriz(matriz)
+    '''
 
-
-
+    print_matrix_empty()
+    inputs()
+    #distanciaAngulo(distancia_alto,distancia_ancho)
+    #print_matriz(matriz)
 
 def radianesCartesianos2D():
     distance = int(input("insert distance: "))
@@ -184,7 +235,7 @@ def inicio():
         menu()
         opcionInicial = int(input("Inserte una opcion: "))
         if opcionInicial == 1:
-            cartesianoRadianes()
+            cartesianoRadianes3D()
         elif opcionInicial == 2:
             radianesCartesianos()
         elif opcionInicial == 3:
