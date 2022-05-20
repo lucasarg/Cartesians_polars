@@ -7,7 +7,7 @@ arreglar:
 
 mejoras previstas:
 - Anticipacion/pronosticar ubicacion del objeto
-- caluclar sitancias relativas si el observador se encuentra en movimiento
+- caluclar distancias relativas si el observador se encuentra en movimiento
 '''
 import os
 import math
@@ -16,13 +16,14 @@ def menu():
     print('''
     --------- calc of artillery  -----------
     Opciones en 3D:
-    1) De cartesianos a radianes (3D)
-    2) De radianes a cartesianos (3D)
+    1) De cartesianos a polares (3D)
+    2) De polares a cartesianos (3D)
 
 
     Opciones en 2D:
-    3) De cartesianos a radianes (2D)
-    4) De radianes a cartesianos (2D)
+    3) De cartesianos a polares (2D)
+    4) De polares a cartesianos (2D)
+
 
     5) Info
     0) salir    
@@ -30,7 +31,7 @@ def menu():
 
 
 
-def cartesianoRadianes3D():
+def cartesianoPolares3D():
     os.system("cls")
 
     #    X  Y   Z
@@ -68,6 +69,7 @@ def cartesianoRadianes3D():
         print("position of the objective ",a)
         print("\n")
         print("total distance(space XYZ) is: ",diagonal_XYZ, " units.")
+        return diagonal_XYZ
 
     def angle(a):
         
@@ -77,17 +79,17 @@ def cartesianoRadianes3D():
         def print_angle(AngleXY, AngleXZ):
             print(f'the angle XY is: {AngleXY}°')
             print(f'the angle XZ is: {AngleXZ}°')   
-
+   
         def print_map(AngleXY, AngleXZ):
 
             print(f'''
                             Z  
                             |     α XZ: {AngleXZ}°
-                            |      
-                            |_ _ _ _ _ _ X           
-                           /
+                            |                                /
+                            |_ _ _ _ _ _ Z                  / lenght: 
+                           /                               /
                           /   ß XY: {AngleXY}°
-                     Y   /
+                     X   /
             ''')
         print_angle(AngleXY, AngleXZ)
         print_map(AngleXY, AngleXZ)
@@ -100,42 +102,42 @@ def cartesianoRadianes3D():
 
 
 
-def radianesCartesianos():
+def polaresCartesianos():
 
     def print_plane():
         print(f'''
                          Z  
                          |    
                          |      
-                         |_ _ _ _ _ _ X
+                         |_ _ _ _ _ _ Y
                         /
                        /   
-                   Y  /
+                   X  /
         ''')
     
     print_plane()
     distance = int(input("Isnsert distance: "))
-    angleXZ =  math.radians(int(input("Insert angle XY in degrees: ")))
-    angleXY =  math.radians(int(input("Insert angle XZ in degrees: ")))
+    angleXZ =  math.polars(int(input("Insert angle XY in degrees: ")))
+    angleXY =  math.polars(int(input("Insert angle XZ in degrees: ")))
 
  
     '''
     if angle.lower() == "rad":
-        angle = int(input("inser angle in radians: "))
+        angle = int(input("inser angle in polars: "))
     else:
-        angle = math.radians(int(angle))'''
+        angle = math.polars(int(angle))'''
 
 
     X = round(math.cos(angleXZ) * distance,2)
     Y = round(math.sin(angleXY) * distance,2)
     Z = round(math.sin(angleXZ) * distance,2)
     
-    print(f'el objetivo se encuentra eje X: {X}')
-    print(f'el objetivo se encuentra eje Y: {Y}')
-    print(f'el objetivo se encuentra eje Z: {Z}')
+    print(f'the objective finds in axisaxis X: {X}')
+    print(f'the objective finds in axisaxis Y: {Y}')
+    print(f'the objective finds in axisaxis Z: {Z}')
     
 
-def cartesianoRadianes2D():
+def cartesianoPolares2D():
 
     def print_matrix_empty():
         print('''
@@ -148,111 +150,102 @@ def cartesianoRadianes2D():
     |    
     |    ''')
 
-    ''' 
-    matriz = []
-    def matrix():
-        nonlocal matriz
-        size = 10
-        #size = int(input("insert size of the map"))
-        for i in range(size):
-            matriz.append([])
-            for j in range(size):
-                matriz[i].append("_")
-    matrix()'''
   
     def inputs():
-        print("ingrese las siguentes ubicaciones: ")
-        mi_horizontal =  int(input(" ubicacion horizontal observador (eje x): "))
-        mi_vertical =  int(input(" ubicacion vertical observador(eje y): "))
-        objetivo_horizontal =  int(input(" ubicacion horizontal del objetivo (eje x): "))
-        objetivo_vertical =  int(input(" ubicacion vertical del objetivo (eje y): "))
+        print("insert next locations: ")
+        obs = input("the observer will be placed in position (X,Y) = (0,0) ? (y/n)")   
+        if obs.lower() == "y":
+            my_horizontal = 0
+            my_vertical = 0
+            return my_vertical
+        elif obs.lower() == "n":
+            my_horizontal = int(input(" place of the observator in axis X: "))
+            my_vertical = int(input(" place of the observator in axis Y: "))
+        else:
+            print("something went wrong")
 
-        distancia_alto = mi_vertical - objetivo_vertical
-        distancia_ancho = mi_horizontal - objetivo_horizontal
+        objective_X =  int(input(" place of the objective in axis X: "))
+        objective_Y =  int(input(" place of the objective in axis Y: "))
+
+        distance_Y = my_horizontal - objective_Y
+        distance_X = my_vertical - objective_X
         
-        def distanciaAngulo(distancia_ancho,distancia_alto):
-            hipotenusa = round(math.sqrt((distancia_alto) **2 + (distancia_ancho) **2),4) 
-            if distancia_alto !=0:
-                angulo = (math.atan(distancia_ancho/ distancia_alto) * 57.2958)
+        def distanceAngle(distance_X,distance_Y):
+            hypotenuse = round(math.sqrt((distance_Y) **2 + (distance_X) **2),4) 
+            if distance_Y !=0:
+                angle = (math.atan(distance_X/ distance_Y) * 57.2958)
             else:
-                angulo = 0
-            print(f'La distancia al objetivo es: {hipotenusa}')
-            print(f'El angulo es: {round(angulo,2)}')
-        distanciaAngulo(distancia_ancho,distancia_alto)
-    '''
-    def print_matriz(matriz):
-        for i in matriz:
-            print(i)
-    '''
+                angle = 0
+            print(f'The distance to objective is: {hypotenuse}')
+            print(f'The angle is: {round(angle,2)}')
+        distanceAngle(distance_X,distance_Y)
+
+
 
     print_matrix_empty()
     inputs()
-    #distanciaAngulo(distancia_alto,distancia_ancho)
-    #print_matriz(matriz)
-
-def radianesCartesianos2D():
+    
+def polarsCartesians2D():
     distance = int(input("insert distance: "))
-    angle = input("insert angle in degrees(if you want in radians press 'rad' ): ")
+    angle = input("insert angle in degrees(if you want in polars press 'rad' ): ")
     if angle.lower() == "rad":
-        angle = int(input("inser angle in radians: "))
+        angle = int(input("inser angle in polars: "))
     else:
-        angle = math.radians(int(angle))
+        angle = math.polars(int(angle))
 
 
     horizontal = round(math.cos(angle) * distance,2)
     vertical = round(math.sin(angle) * distance,2)
     
-    print(f'el objetivo se encuentra horizontalmente {horizontal}')
-    print(f'el objetivo se encuentra verticalmente {vertical}')
+    print(f'the objective finds in axis X: {horizontal}')
+    print(f'the objective finds in axis Y: {vertical}')
 
 
 
-def instrucciones():
+def instructions():
     print('''
-    It is a program that transforms coordinates in 2D, from radiands to cartesians and inverse
+    It is a program that transforms coordinates in 2D, from polars to cartesians and inverse
     
-    The  option 1 "cartesians to radians" you insert the coordinates in the X anxi and later Y anxi,
+    The  option 1 "cartesians to polars" you insert the coordinates in the X, Y and Z anxis,
     from the viewer and the objective, and returns the total distance, and angle
     In the version of artillery, it is useful when you have the coordinates in a map and need to calculate the angle and distance to achieve the objective.
 
-    The option 2 "radians to cartesians" you insert the data in radians and return in cartesians
-    In a artillery situation, you can have a view of an objective and use this data to put the information in a map
-
-
+    The option 2 "polars to cartesians" you insert the data in polars (distance, and angles) and return it in cartesians
+    Imagine a radar where it gives you the distance and angles,then you can use this data to put the objective in a map (in 3D you can see the height)
 
     Next versions:
-    the proyect is to continue this in a 3D model, and add pronostics, that is to calculate the position across the time and where it will be
+    the proyect is to cont and add pronostics, that is to calculate the position across the time and where it will be
 
     this program was built by Tamburo Lucas
     email: tamburolucas@gmail.com
     github: https://github.com/lucasarg
     ''')
 
-def inicio():
-    continuar = True
-    while continuar == True:
+def start(): 
+    cont = True
+    while cont == True:
         os.system("cls")        
         menu()
-        opcionInicial = int(input("Inserte una opcion: "))
-        if opcionInicial == 1:
-            cartesianoRadianes3D()
-        elif opcionInicial == 2:
-            radianesCartesianos()
-        elif opcionInicial == 3:
-            cartesianoRadianes2D()
-        elif opcionInicial == 4:
-            radianesCartesianos2D()
-        elif opcionInicial == 5:
-            instrucciones()
-        elif opcionInicial == 0:
-            continuar = False
+        option1 = int(input("Insert an option: "))
+        if option1 == 1:
+            cartesianoPolares3D()
+        elif option1 == 2:
+            polaresCartesianos()
+        elif option1 == 3:
+            cartesianoPolares2D()
+        elif option1 == 4:
+            polarsCartesians2D()
+        elif option1 == 5:
+            instructions()
+        elif option1 == 0:
+            cont = False
             print("closing...")
         else:
-            print("no se te entendio un pingo culiao")
-        input(print("press 'enter' to continue"))
-    input("hasta luego")
+            print("no se te entendio un pingo ")
+        input(print("press 'enter' to cont"))
+    input("Good bye")
 
 if __name__ == '__main__':
-    inicio()
+    start()
 
 
