@@ -155,21 +155,23 @@ def cartesianoPolares2D():
         print("insert next locations: ")
         obs = input("the observer will be placed in position (X,Y) = (0,0) ? (y/n)")   
         if obs.lower() == "y":
-            my_horizontal = 0
-            my_vertical = 0
-            return my_vertical
+            my_X = 0
+            my_Y = 0
+            return my_Y
         elif obs.lower() == "n":
-            my_horizontal = int(input(" place of the observator in axis X: "))
-            my_vertical = int(input(" place of the observator in axis Y: "))
+            my_X = int(input(" place of the observator in axis X: "))
+            my_Y = int(input(" place of the observator in axis Y: "))
         else:
             print("something went wrong")
 
         objective_X =  int(input(" place of the objective in axis X: "))
         objective_Y =  int(input(" place of the objective in axis Y: "))
 
-        distance_Y = my_horizontal - objective_Y
-        distance_X = my_vertical - objective_X
-        
+        distance_X = my_X - objective_X
+        distance_Y =  my_Y - objective_Y
+        #above here I want to put this in a functions but I can't find the solutions with the returns of the variables
+
+
         def distanceAngle(distance_X,distance_Y):
             hypotenuse = round(math.sqrt((distance_Y) **2 + (distance_X) **2),4) 
             if distance_Y !=0:
